@@ -1,12 +1,21 @@
 #! /bin/bash
 ###########################################################################
 ##                                                                       ##
+<<<<<<< HEAD
 ##                              OCamlClean                               ##
 ##                                                                       ##
 ##                             Benoit Vaugon                             ##
 ##                                                                       ##
 ##    This file is distributed under the terms of the CeCILL license.    ##
 ##    See file ../LICENSE-en.                                            ##
+=======
+##                                OCaPIC                                 ##
+##                                                                       ##
+##            Benoit Vaugon, Université Pierre et Marie Curie            ##
+##                                                                       ##
+##    Ce fichier est distribué sous les termes de la licence CeCILL-B    ##
+##    décrite dans le fichier LICENCE.                                   ##
+>>>>>>> asvm/master
 ##                                                                       ##
 ###########################################################################
 
@@ -19,9 +28,13 @@ for d in "$DEST" "$DEST/dist" "$DEST/etc"; do
     mkdir "$d"
 done
 
+<<<<<<< HEAD
 for d in \
     bin configure INSTALL LICENSE-fr LICENSE-en Makefile man src VERSION;
 do
+=======
+for d in bin configure INSTALL LICENCE LICENCE-en Makefile man src VERSION; do
+>>>>>>> asvm/master
     cp -R ../"$d" "$DEST/"
 done
 

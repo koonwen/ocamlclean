@@ -92,6 +92,7 @@ let prepare_code old_code cleanables ignore_fulls =
               | None -> f (succ indg) adds cleans
           else
             (List.sort Pervasives.compare adds, cleans)
+
   in
   let adds, cleans = f 0 [] [] in
   let old_code_size = Array.length old_code in

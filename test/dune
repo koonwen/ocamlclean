@@ -3,4 +3,53 @@
 
 (executable
  (name main)
- (modes byte))
+ (modes
+  (byte c)
+  (byte exe)))
+
+(rule
+ (target main.clean.c)
+ (deps main.bc)
+ (action
+  (run ocamlclean -verbose %{deps} -o %{target})))
+
+(rule
+ (target main.clean.out)
+ (deps main.clean.c start.c)
+ (action
+  (run
+   %{cc}
+   -I%{ocaml-config:standard_library}
+   -L%{ocaml-config:standard_library}
+   %{deps}
+   -lcamlrun
+   -lm
+   -ldl
+   -Wl,--gc-sections
+   -o
+   %{target})))
+
+(rule
+ (target main.out)
+ (deps main.bc.c start.c)
+ (action
+  (run
+   %{cc}
+   -I%{ocaml-config:standard_library}
+   -L%{ocaml-config:standard_library}
+   %{deps}
+   -lcamlrun
+   -lm
+   -ldl
+   -Wl,--gc-sections
+   -o
+   %{target})))
+
+(rule
+ (alias runtest)
+ (deps main.out main.clean.out)
+ (action
+  (progn
+   (run ./main.out)
+   (run ./main.clean.out)
+   (run size %{deps}))))

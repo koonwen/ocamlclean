@@ -125,7 +125,7 @@ let compute_branch_targets code =
   btargs
 ;;
 
-let export oc code =
+let export_code write code =
   let nb_instr = Array.length code in
   let btargs = compute_branch_targets code in
   let map = Array.make nb_instr (-1) in
@@ -176,9 +176,9 @@ let export oc code =
               | Closurerec (f, v, o, t) ->
                 write 44 ; write f ; write v;
                 write_ptr 3 o ; write_ptrs 3 t;
-              | Offsetclosure (-2)    -> write 45
+              | Offsetclosure (-3)    -> write 45
               | Offsetclosure 0       -> write 46
-              | Offsetclosure 2       -> write 47
+              | Offsetclosure 3       -> write 47
               | Offsetclosure n       -> write 48 ; write n
               | Getglobal n           -> write 53 ; write n
               | Getglobalfield (n, p) -> write 55 ; write n ; write p
@@ -303,9 +303,9 @@ let export oc code =
             | Envacc 3 -> write 28 ; normal (succ i)
             | Envacc 4 -> write 29 ; normal (succ i)
             | Envacc n -> write 30 ; write n ; normal (succ i)
-            | Offsetclosure (-2) -> write 49 ; normal (succ i)
+            | Offsetclosure (-3) -> write 49 ; normal (succ i)
             | Offsetclosure 0 -> write 50 ; normal (succ i)
-            | Offsetclosure 2 -> write 51 ; normal (succ i)
+            | Offsetclosure 3 -> write 51 ; normal (succ i)
             | Offsetclosure n -> write 52 ; write n ; normal (succ i)
             | Getglobal n -> write 54 ; write n ; normal (succ i)
             | Getglobalfield (n,p) ->
@@ -333,14 +333,27 @@ let export oc code =
     let step i = map.(i) <- !cpt in
     pass write step;
   end;
-  begin
-    let write n =
-      output_byte oc (n land 0xFF);
-      output_byte oc ((n asr 8) land 0xFF);
-      output_byte oc ((n asr 16) land 0xFF);
-      output_byte oc ((n asr 24) land 0xFF);
-    in
-    let step _ = () in
-    pass write step;
-  end;
-;;
+  let step _ = () in
+  pass write step
+  
+
+let export oc code =
+  let write n =
+    output_byte oc (n land 0xFF);
+    output_byte oc ((n asr 8) land 0xFF);
+    output_byte oc ((n asr 16) land 0xFF);
+    output_byte oc ((n asr 24) land 0xFF);
+  in
+  export_code write code
+
+let export_c oc code =
+  let open C_util in
+  let write n =
+    let s = Bytes.create 4 in
+    Bytes.set s 0 (Char.chr (n land 0xFF));
+    Bytes.set s 1 (Char.chr ((n asr 8) land 0xFF));
+    Bytes.set s 2 (Char.chr ((n asr 16) land 0xFF));
+    Bytes.set s 3 (Char.chr ((n asr 24) land 0xFF));
+    output_code_string oc s
+  in
+  export_code write code

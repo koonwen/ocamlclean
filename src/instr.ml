@@ -157,13 +157,13 @@ let parse read =
               for i = 1 to f - 2 do t.(i) <- read_ptr () done ; t
           in
           [ Closurerec (f, v, o, t) ]
-        | 45 ->  [ Offsetclosure (-2) ]
+        | 45 ->  [ Offsetclosure (-3) ]
         | 46 ->  [ Offsetclosure 0 ]
-        | 47 ->  [ Offsetclosure 2 ]
+        | 47 ->  [ Offsetclosure 3 ]
         | 48 ->  [ Offsetclosure (read ()) ]
-        | 49 ->  [ Push ; Offsetclosure (-2) ]
+        | 49 ->  [ Push ; Offsetclosure (-3) ]
         | 50 ->  [ Push ; Offsetclosure 0 ]
-        | 51 ->  [ Push ; Offsetclosure 2 ]
+        | 51 ->  [ Push ; Offsetclosure 3 ]
         | 52 ->  [ Push ; Offsetclosure (read ()) ]
         | 53 ->  [ Getglobal (read ()) ]
         | 54 ->  [ Push ; Getglobal (read ()) ]

@@ -85,7 +85,7 @@ let replace_envaccs code data =
           new_env_assoc
       in
       env_assoc :=
-        (env_ind + 2 * (ptrs_nb - env_ofs - 1), glob_ind) :: !env_assoc;
+        (1 + env_ind + 3 * (ptrs_nb - env_ofs - 1), glob_ind) :: !env_assoc;
     in
     update_env_assoc (-1) ptr;
     Array.iteri update_env_assoc ptrs;

@@ -1,0 +1,6 @@
+(cram
+ (deps %{bin:ocamlclean} main.bc))
+
+(executable
+ (name main)
+ (modes byte))

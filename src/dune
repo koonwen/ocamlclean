@@ -1,7 +1,9 @@
 (executable
-  (name main)
-  (public_name ocamlclean))
+ (name main)
+ (public_name ocamlclean)
+ (libraries str))
 
 (rule
-  (with-stdout-to config.ml
-    (echo "let version = \"%{version:ocamlclean}\"")))
+ (with-stdout-to
+  config.ml
+  (echo "let version = \"%{version:ocamlclean}\"")))
